@@ -1,0 +1,109 @@
+#!/bin/bash
+
+#query
+
+# curl -XGET http://localhost:9200/index_name/_search -d '{
+# 		"query":	{},
+# 		"from":	0,
+# 		"size":	20,
+# 		"_source":	["field1","field2"]
+# }'
+
+# curl -XGET localhost:9200/index_name/doc_type/_search -d '{
+# 	"query":{
+# 		"query_string":{
+# 			"default_field":"category",
+# 			"query":"search"
+# 		}
+# 	}
+# }' | python -m json.tool
+# 
+#query with match all
+
+# curl -XGET localhost:9200/index_name/_search -d '{
+# 	"query":{
+# 		"match_all":{}
+# 	}
+# }' | python -m json.tool
+# 
+#query with match
+
+# curl -XGET localhost:9200/_search -d '{
+# 	"query":{
+# 		"match":{
+# 			"text":"hello",
+# 			"operator":"and",
+# 			"type":"phrase"
+# 		}
+# 	}
+# }' | python -m json.tool  #"ope"
+
+#query with multi match
+# curl -XGET localhost:9200/_search -d '{
+# 	"query":{
+# 		"multi_match":{
+# 			"query":"hello",
+# 			"fields": ["text", "doc"]
+# 		}
+# 	}
+# }' | python -m json.tool
+
+# #query with query string'
+# curl -XGET localhost:9200/_search -d '{
+# 	"query":{
+# 		"query_string":{
+# 			"default_field":"text",
+# 			"query":"text:hello +text:data -user.name:d_bharvi1"
+# 		}
+# 	}
+# }' | python -m json.tool
+
+
+#Term query
+
+# curl -XGET localhost:9200/_search -d '{
+# 	"query":{
+# 		"term":{
+# 			"text":"hello"
+# 		}
+# 	}
+# }' | python -m json.tool  
+# 
+#Range query
+
+# curl -XGET localhost:9200/_search -d '{
+# 	"query":{
+# 		"range":{
+# 			"num":{
+# 				"gte":10,
+# 				"lte":100
+# 			}
+# 		}
+# 	}
+# }' | python -m json.tool
+#
+
+#Exists query
+
+curl -XGET localhost:9200/_search -d '{
+	"query":{
+		"constant_score":{
+			"filter":{
+				"exists":{"field":"in_reply_to_user_id"}
+			}
+		}
+	}
+}' | python -m json.tool
+
+#With Missing
+
+
+curl -XGET localhost:9200/_search -d '{
+	"query":{
+		"constant_score":{
+			"filter":{
+				"missing":{"field":"doc"}
+			}
+		}
+	}
+}' | python -m json.tool  

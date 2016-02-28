@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#Bool query
+
+
+# curl -XGET http://localhost:9200/_search -d '{
+# 		"query":{
+# 		"bool":{
+# 				"must":[{}],
+# 				"should":[
+# 					{"term":{"text":{"value":"turmoil"}}},
+# 					{"term":{"text":{"value":"riot"}}}
+# 				],
+# 				"must_not":[{}]
+# 				"filter":[{}]
+# 				}
+# 		}
+# }' | python -m json.tool
+
+#Not query
+
+curl -XGET http://localhost:9200/_search -d '{
+		"filter":{
+		"not":{
+				"filter":{
+					"range":{
+						"create_at":{
+							"from":"2015-01-01",
+							"to":"2016-01-01"
+						}
+					}
+				}
+		}
+}' | python -m json.tool
